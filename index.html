@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>Genially Game Builder v11.0</title>
+    <title>Genially Game Builder v12.0</title>
     <style>
         :root { --accent: #bc13fe; }
         body { font-family: sans-serif; margin: 0; display: flex; height: 100vh; background: #111; color: white; }
@@ -11,25 +11,25 @@
         input { width: 100%; padding: 8px; margin: 5px 0; background: #000; color: #00f7ff; border: 1px solid #444; border-radius: 4px; box-sizing: border-box; }
         label { font-size: 11px; color: #888; text-transform: uppercase; display: block; margin-top: 10px; }
         #view { flex-grow: 1; padding: 20px; background: #000; display: flex; flex-direction: column; }
-        .win { flex-grow: 1; border: 1px solid #333; border-radius: 10px; overflow: hidden; background: #050505; position: relative; }
+        .win-box { flex-grow: 1; border: 1px solid #333; border-radius: 10px; overflow: hidden; background: #050505; position: relative; }
         .btn-copy { background: var(--accent); color: white; padding: 15px; width: 100%; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; margin-top: 10px; }
-        .lang-btn { float: right; background: #333; color: #fff; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; }
+        .lang-btn { float: right; background: #333; color: #fff; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; font-size: 11px; }
     </style>
 </head>
 <body>
 
 <div id="panel">
     <button class="lang-btn" onclick="toggleLang()">EN / RU</button>
-    <h2 id="h-title">Редактор v11.0</h2>
+    <h2 id="h-title">Редактор v12.0</h2>
     
-    <label id="l-hero">Герой (PNG):</label>
+    <label id="l-hero">Ссылка на котика/героя:</label>
     <input type="text" id="h-url" value="https://cdn-icons-png.flaticon.com/512/616/616430.png" oninput="draw()">
     
-    <label id="l-col">Цвет (HEX):</label>
+    <label id="l-col">Цвет лестницы:</label>
     <input type="color" id="h-col" value="#bc13fe" oninput="draw()">
 
     <label id="l-win">Текст победы:</label>
-    <input type="text" id="w-msg" value="УРА! ТЫ ПОБЕДИЛ!" oninput="draw()">
+    <input type="text" id="w-msg" value="МОЛОДЕЦ! ТЫ ВСЁ ЗНАЕШЬ!" oninput="draw()">
 
     <label id="l-lose">Текст проигрыша:</label>
     <input type="text" id="l-msg" value="ПОПРОБУЙ ЕЩЕ РАЗ!" oninput="draw()">
@@ -39,14 +39,14 @@
 </div>
 
 <div id="view">
-    <div id="f-box" class="win"></div>
+    <div id="f-box" class="win-box"></div>
 </div>
 
 <script>
     let lang = 'ru';
     const ui = {
-        ru: { title: "Редактор v11.0", hero: "Герой (PNG)", col: "Цвет (HEX)", win: "Текст победы", lose: "Текст проигрыша", copy: "СКОПИРОВАТЬ КОД", alert: "Код скопирован!" },
-        en: { title: "Editor v11.0", hero: "Hero (PNG)", col: "Color (HEX)", win: "Win Message", lose: "Lose Message", copy: "COPY CODE", alert: "Code copied!" }
+        ru: { title: "Редактор v12.0", hero: "Ссылка на героя", col: "Цвет лестницы", win: "Текст победы", lose: "Текст проигрыша", copy: "СКОПИРОВАТЬ КОД", alert: "Код скопирован!" },
+        en: { title: "Editor v12.0", hero: "Hero URL", col: "Stairs Color", win: "Win Message", lose: "Lose Message", copy: "COPY CODE", alert: "Code copied!" }
     };
 
     let qs = [
@@ -89,13 +89,13 @@
     }
 
     function getCode() {
-        const hero = document.getElementById('h-url').value;
+        const h = document.getElementById('h-url').value;
         const col = document.getElementById('h-col').value;
         const wm = document.getElementById('w-msg').value;
         const lm = document.getElementById('l-msg').value;
         const data = JSON.stringify(qs);
 
-        return `<iframe srcdoc='<!DOCTYPE html><html><head><meta charset="UTF-8"><style>body,html{margin:0;padding:0;overflow:hidden;background:#000;height:600px;width:100%;font-family:sans-serif}.p{position:absolute;width:50px;height:12px;background:${col};border-radius:10px;box-shadow:0 4px 10px ${col}66;transition:0.4s;opacity:0.3}.p.active{opacity:1;border:1px solid #fff}#h{position:absolute;width:45px;height:55px;z-index:10;transition:0.5s;bottom:0}#q{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);background:rgba(15,15,15,0.98);border:2px solid ${col};border-radius:20px;padding:20px;width:260px;color:#fff;text-align:center;z-index:100;display:none;box-shadow:0 0 30px rgba(0,0,0,1)}.bt{background:rgba(255,255,255,0.1);border:1px solid ${col};color:#fff;width:100%;padding:10px;margin:5px 0;border-radius:10px;cursor:pointer;font-weight:bold}#s{position:absolute;top:10px;left:10px;color:#fff;z-index:110;display:flex;gap:5px}.i{background:rgba(0,0,0,0.8);padding:5px 10px;border-radius:8px;border:1px solid ${col};font-size:12px}</style></head><body><div id="s"><div class="i" id="hp">❤️ ❤️ ❤️</div><div class="i" id="st">STEP: 1/14</div></div><img id="h" src="${hero}"><div id="q"><div id="qt" style="font-size:17px;margin-bottom:12px"></div><div id="as"></div></div><script>const tasks=${data};let cur=0,liv=3;const h=document.getElementById("h");const pls=[];for(let i=0;i<15;i++){const p=document.createElement("div");p.className="p";p.style.left=(20+(i*55))+"px";p.style.top=(530-(i*28))+"px";document.body.appendChild(p);pls.push(p)}function upd(){const t=pls[cur];h.style.left=(parseInt(t.style.left)+2)+"px";h.style.top=(parseInt(t.style.top)-58)+"px";pls.forEach((p,i)=>p.classList.toggle("active",i<=cur))}function uQ(){if(cur>=14){f(true);return}document.getElementById("st").innerText="STEP: "+(cur+1)+"/14";document.getElementById("q").style.display="block";document.getElementById("qt").innerText=tasks[cur].q;const b=document.getElementById("as");b.innerHTML="";tasks[cur].a.forEach((t,i)=>{const btn=document.createElement("button");btn.className="bt";btn.innerText=t;btn.onclick=()=>{if(i===tasks[cur].c){cur++;document.getElementById("q").style.display="none";upd();setTimeout(uQ,500)}else{liv--;document.getElementById("hp").innerText="❤️ ".repeat(liv);if(liv<=0)f(false)}};b.appendChild(btn)})}function f(win){const b=document.getElementById("q");b.style.display="block";b.innerHTML="<h2>"+(win?"${wm}":"${lm}")+"</h2><button class=\'bt\' onclick=\'location.reload()\'>RESTART</button>"}upd();uQ();<\/script></body></html>' style='width:100%;height:600px;border:none;'></iframe>`.replace(/\n/g, '');
+        return `<iframe srcdoc='<!DOCTYPE html><html><head><meta charset="UTF-8"><style>body,html{margin:0;padding:0;overflow:hidden;background:#000;height:100vh;width:100vw;font-family:sans-serif}canvas{display:block}#ui{position:absolute;top:10px;left:10px;z-index:10;display:flex;gap:5px}.b{background:rgba(0,0,0,0.8);color:#fff;padding:5px 10px;border-radius:10px;border:1px solid ${col};font-size:12px}#q{position:absolute;top:30%;left:50%;transform:translate(-50%,-50%);background:rgba(15,15,15,0.98);border:2px solid ${col};border-radius:20px;padding:25px;width:260px;color:#fff;text-align:center;display:none;z-index:20;box-shadow:0 0 30px rgba(0,0,0,0.5)}.bt{background:rgba(255,255,255,0.1);border:1px solid ${col};color:#fff;width:100%;padding:10px;margin:5px 0;border-radius:10px;cursor:pointer;font-weight:bold;transition:0.2s}.bt:hover{background:${col}}</style></head><body><div id="ui"><div class="b" id="hp">❤️ ❤️ ❤️</div><div class="b" id="st">STEP: 1/14</div></div><div id="q"><div id="qt" style="font-size:18px;margin-bottom:15px;font-weight:bold"></div><div id="as"></div></div><canvas id="c"></canvas><script>const img=new Image();img.src="${h}";const cvs=document.getElementById("c"),ctx=cvs.getContext("2d"),tasks=${data};let cur=0,liv=3,jT=1,sP={x:0,y:0},tP={x:0,y:0};function rs(){cvs.width=window.innerWidth;cvs.height=window.innerHeight;if(pls.length===0){for(let i=0;i<15;i++){pls.push({x:30+(i*55),y:cvs.height-80-(i*25)})}}hP={x:pls[cur].x,y:pls[cur].y}}const pls=[];window.onresize=rs;let hP={x:0,y:0};function dP(x,y,a){ctx.save();ctx.translate(x,y);ctx.fillStyle=a?"${col}":"rgba(80,80,80,0.3)";ctx.beginPath();ctx.moveTo(0,0);ctx.lineTo(25,-12);ctx.lineTo(50,0);ctx.lineTo(25,12);ctx.closePath();ctx.fill();ctx.restore()}function dH(x,y,t){const b=Math.sin(t*Math.PI)*40;if(img.complete)ctx.drawImage(img,x,y-b-60,50,60)}function u(){ctx.clearRect(0,0,cvs.width,cvs.height);pls.forEach((p,i)=>dP(p.x,p.y,i<=cur));if(jT<1){jT+=0.05;hP.x=sP.x+(tP.x-sP.x)*jT;hP.y=sP.y+(tP.y-sP.y)*jT;if(jT>=1){jT=1;if(cur<14)uQ();else f(true)}}dH(hP.x,hP.y,jT);requestAnimationFrame(u)}function uQ(){document.getElementById("st").innerText="STEP: "+(cur+1)+"/14";document.getElementById("q").style.display="block";document.getElementById("qt").innerText=tasks[cur].q;const b=document.getElementById("as");b.innerHTML="";tasks[cur].a.forEach((t,i)=>{const btn=document.createElement("button");btn.className="bt";btn.innerText=t;btn.onclick=()=>{if(i===tasks[cur].c){document.getElementById("q").style.display="none";sP={x:hP.x,y:hP.y};cur++;tP={x:pls[cur].x,y:pls[cur].y};jT=0}else{liv--;document.getElementById("hp").innerText="❤️ ".repeat(liv);if(liv<=0)f(false)}};b.appendChild(btn)})}function f(win){const box=document.getElementById("q");box.style.display="block";box.innerHTML="<h2>"+(win?"${wm}":"${lm}")+"</h2><button class=\'bt\' onclick=\'location.reload()\'>RESTART</button>"}img.onload=()=>{rs();uQ();u()};if(img.complete)img.onload();<\/script></body></html>' style='width:100%;height:600px;border:none;'></iframe>`.replace(/\n/g, '');
     }
 
     function draw() { document.getElementById('f-box').innerHTML = getCode(); }
